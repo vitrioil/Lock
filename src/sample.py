@@ -112,8 +112,8 @@ class Sample:
 		print()
 		print("Testing set was made")
 		if save:
-			locTrain = "D:/Lock/Data/Training/array/"
-			locTest = "D:/Lock/Data/Test/array/"
+			locTrain = "../Data/Training/array/"
+			locTest = "../Data/Test/array/"
 			np.save(locTrain+"X_train.npy",X_train)
 			np.save(locTrain+"Y_train.npy",Y_train[...,np.newaxis])
 			np.save(locTest+"X_test.npy",X_test)
@@ -122,8 +122,8 @@ class Sample:
 		return X_train,Y_train,X_test,Y_test
 
 	def load_dataset(self):
-		locTrain = "D:/Lock/Data/Training/array/"
-		locTest = "D:/Lock/Data/Test/array/"
+		locTrain = "../Data/Training/array/"
+		locTest = "../Data/Test/array/"
 		X_train = np.load(locTrain+"X_train.npy")
 		Y_train = np.load(locTrain+"Y_train.npy")
 		X_test = np.load(locTest+"X_test.npy")
