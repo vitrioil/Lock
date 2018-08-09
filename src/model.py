@@ -1,6 +1,7 @@
 import keras
 import numpy as np
 from td_utils import *
+import tensorflow as tf
 import matplotlib.pyplot as plt
 from keras.optimizers import Adam
 from keras.callbacks import ModelCheckpoint
@@ -62,17 +63,24 @@ class TModel:
 
 	def load_model(self):
 		self.model = keras.models.load_model("../Data/Model/model2.h5")
+		self.graph = tf.get_default_graph()
 
-	def detect_triggerword(self,filename):
-		plt.subplot(2, 1, 1)
+	def detect_triggerword(self,filename,plot_graph=False):
+		plt.subplot(2,1,1)
 		x = graph_spectrogram(filename)
 		# the spectogram outputs (freqs, Tx) and we want (Tx, freqs) to input into the model
 		x  = x.swapaxes(0,1)
 		x = np.expand_dims(x, axis=0)
+		if x.shape[1] < 5511:
+			print(x.shape)
+			return None
 		x = x[:,:5511,:]
-		predictions = self.model.predict(x)
-		print(predictions);plt.subplot(2, 1, 2)
-		plt.plot(predictions[0,:,0])
-		plt.ylabel('probability')
-		plt.show()
+		with self.graph.as_default():
+			predictions = self.model.predict(x)
+		predictions = np.argmax(predictions,axis=2)
+		if plot_graph:
+			plt.subplot(2, 1, 2)
+			plt.plot(predictions[0,:])
+			plt.ylabel('probability')
+			plt.show()
 		return predictions

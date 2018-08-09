@@ -7,5 +7,5 @@ if __name__ == '__main__':
 	model = TModel(5511,101,x_train,y_train,x_test,y_test);model.load_model()
 	print(((model.Y_train.shape[0]*1375)-np.sum(np.argmax(model.Y_train,axis=2)))/(model.Y_train.shape[0]*1375))#model.load_model()
 	#print(np.sum(np.argmax(model.Y_train[5],axis=1)));print(model.Y_train[5])
-	#model.detect_triggerword("../Data/Training/raw/train5.wav")
-	model.train(lr=5e-6,epochs=100,batch_size=40,saved=True)
+	#model.detect_triggerword("../Data/Training/raw/train5.wav")	
+	model.train(lr=5e-5,epochs=50,batch_size=40,saved=True)

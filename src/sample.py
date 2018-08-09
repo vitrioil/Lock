@@ -9,7 +9,7 @@ class Sample:
 	freq = 101
 	Ty = 1375 
 	bg_len = 10_000
-	def __init__(self,posPath,negPath,bgPath,pos_answer_len=75,train_size=100,test_size=30,saved=False):
+	def __init__(self,posPath,negPath,bgPath,pos_answer_len=50,train_size=100,test_size=30,saved=False):
 		self.posPath = posPath
 		self.negPath = negPath
 		self.bgPath = bgPath
@@ -56,7 +56,7 @@ class Sample:
 	def create_one_example(self,background,num,train= True):
 		background = background - 20
 
-		total_pos,total_neg = np.random.randint(3,6),np.random.randint(2,5)
+		total_pos,total_neg = np.random.randint(1,5),np.random.randint(1,5)
 		pos_data,neg_data = [],[]
 		y = np.zeros((1,self.Ty),dtype=np.int)
 		segments = []
@@ -64,7 +64,7 @@ class Sample:
 			random_index = np.random.randint(0,len(self.activates))
 			background,interval,segments,timed = self.insert_audio(background,segments,self.activates[random_index])
 			if timed:
-				pass#;i -= 1
+				i -= 1
 			else:
 				pos_data.append(self.activates[random_index])
 				y = self.insert_ones(y,interval[1])
@@ -73,7 +73,7 @@ class Sample:
 			random_index = np.random.randint(0,len(self.negatives))
 			background,interval,segments,timed = self.insert_audio(background,segments,self.negatives[random_index])
 			if timed:
-				pass#i -= 1
+				i -= 1
 			else:
 				neg_data.append(self.negatives[random_index])
 			
@@ -84,7 +84,7 @@ class Sample:
 		_ = background.export(location,format="wav")
 		print(f"{location} saved!",end="\r")
 		x = graph_spectrogram(location)
-		x = x.transpose([1,0]);print(np.sum(y))
+		x = x.transpose([1,0])
 		return x,y
 
 
@@ -131,8 +131,8 @@ class Sample:
 		return X_train,Y_train,X_test,Y_test
 
 if __name__ == '__main__':
-	pos = "D:/Lock/Data/Pos/"
-	neg = "D:/Lock/Data/Neg/"
-	bg = "D:/Lock/Data/BG/"
-	s = Sample(pos,neg,bg,train_size=100,test_size=30)
+	pos = "../Data/Pos/"
+	neg = "../Data/Neg/"
+	bg = "../Data/BG/"
+	s = Sample(pos,neg,bg,train_size=200,test_size=60)
 	s.make_data_set()

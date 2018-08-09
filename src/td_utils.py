@@ -14,6 +14,7 @@ def graph_spectrogram(wav_file):
         pxx, freqs, bins, im = plt.specgram(data, nfft, fs, noverlap = noverlap)
     elif nchannels == 2:
         pxx, freqs, bins, im = plt.specgram(data[:,0], nfft, fs, noverlap = noverlap)
+
     return pxx[:,:5511]
 
 # Load a wav file
@@ -44,3 +45,7 @@ def load_raw_audio(pos,neg,bg):
             negative = AudioSegment.from_wav(neg+filename)
             negatives.append(negative)
     return activates, negatives, backgrounds
+
+#print(graph_spectrogram("../Data/BG/BG1.wav").shape)
+#print(graph_spectrogram("../Data/BG/BG3.wav").shape)
+#print(graph_spectrogram("../Data/BG/BG4.wav").shape)
