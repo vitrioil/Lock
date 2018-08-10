@@ -2,6 +2,7 @@ import wave
 import time
 import socket
 import pyaudio
+import pyautogui
 import numpy as np
 from queue import Queue
 from model import TModel
@@ -53,7 +54,6 @@ class Listen:
                 print("Exception in tcpStream()",str(e))
                 self._close()
                 self.save()
-
     
     def _close(self):
         print("Closing the socket")
@@ -79,7 +79,6 @@ class Listen:
         print(f"Frames length is now {len(self.frames)}")
         self.saved=True
 
-
     def reset_save(self):
         self.saved = False
         
@@ -94,6 +93,7 @@ class Listen:
                 if time.time() - last_time > 10:
                     last_time = time.time()
                     self.reset_save()
+                time.sleep(8)
             except KeyboardInterrupt as e:
                 print("Exception in stop()",str(e))
                 self.close()
@@ -132,10 +132,12 @@ class Evaluate:
                         continuous = 0
                     if continuous >= 50:
                         print("Did you say lock?",end="\r")
+                        pyautogui.press(["alt","shift","x"])_
                         continuous = 0
             time.sleep(2)
 
 def start_threads(l,e):
+    print("Creating and starting threads")
     tTCP = Thread(target = l.tcpStream)
     tPlay = Thread(target = l.play)
     tStop = Thread(target=l.stop)
@@ -156,6 +158,9 @@ if __name__ == "__main__":
                     output = True,
                     frames_per_buffer = chunk,
                     )
+    print("Initializing",end="\r")
     l = Listen(p,stream,form,chunk,channels,rate)
     e = Evaluate(l)
+    time.sleep(2)
+    print("Done!      ")
     start_threads(l,e)
